@@ -1,4 +1,4 @@
-package entity;
+package com.hessky.entity;
 
 import javax.persistence.*;
 

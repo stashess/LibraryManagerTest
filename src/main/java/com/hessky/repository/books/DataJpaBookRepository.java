@@ -1,11 +1,9 @@
-package repository.books;
+package com.hessky.repository.books;
 
-import entity.Author;
-import entity.Book;
+import com.hessky.entity.Book;
+import com.hessky.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-import repository.BookRepository;
 
 import java.util.List;
 
@@ -14,34 +12,26 @@ import java.util.List;
  */
 
 @Repository
-@Transactional
 public class DataJpaBookRepository implements BookRepository {
 
-    @Autowired
-    CrudBookRepository crudBookRepository;
+    private CrudBookRepository crudBookRepository;
 
     @Autowired
-    CrudAuthorRepository crudAuthorRepository;
+    public DataJpaBookRepository(CrudBookRepository crudBookRepository) {
+        this.crudBookRepository = crudBookRepository;
+    }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Book> getAll() {
         return crudBookRepository.findAll();
     }
 
     @Override
     public Book saveBook(Book book) throws Exception {
-        Author byName = crudAuthorRepository.getByName(book.getAuthor().getName());
-
-        if (byName == null)
-            crudAuthorRepository.save(book.getAuthor());
-        else book.setAuthor(byName);
-
         return crudBookRepository.save(book);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Book> findByBookName(String oldname) {
         List<Book> bookList = crudBookRepository.findByName(oldname);
         return bookList;

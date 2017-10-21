@@ -1,6 +1,6 @@
-package util;
+package com.hessky.util;
 
-import entity.ParsedEntity;
+import com.hessky.to.ParsedEntity;
 
 import java.util.regex.Pattern;
 

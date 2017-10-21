@@ -1,7 +1,7 @@
-package util;
+package com.hessky.util;
 
 
-import entity.ParsedEntity;
+import com.hessky.to.ParsedEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

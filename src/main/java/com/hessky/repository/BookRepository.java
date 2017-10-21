@@ -1,6 +1,7 @@
-package repository;
+package com.hessky.repository;
 
-import entity.Book;
+
+import com.hessky.entity.Book;
 
 import java.util.List;
 
