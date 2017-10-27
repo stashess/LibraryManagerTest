@@ -1,32 +1,34 @@
 package com.hessky.to;
 
+import com.hessky.util.StatusCode;
+
 /**
  * Created by Stanislav Cheslavskyi on 05.10.2017.
  */
-public class ParsedEntity {
-    private final int status;
+public class InputData {
+    private final StatusCode status;
     private final String authorName;
     private final String bookName;
 
-    public ParsedEntity(int status, String authorName, String bookName) {
+    public InputData(StatusCode status, String authorName, String bookName) {
         this.status = status;
         this.authorName = authorName;
         this.bookName = bookName;
     }
 
-    public ParsedEntity(int status) {
+    public InputData(StatusCode status) {
         this.status = status;
         authorName = null;
         bookName = null;
     }
 
-    public ParsedEntity(int status, String bookName) {
+    public InputData(StatusCode status, String bookName) {
         this.status = status;
         this.bookName = bookName;
         authorName = null;
     }
 
-    public int getStatus() {
+    public StatusCode getStatus() {
         return status;
     }
 
@@ -43,24 +45,24 @@ public class ParsedEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ParsedEntity that = (ParsedEntity) o;
+        InputData inputData = (InputData) o;
 
-        if (status != that.status) return false;
-        if (!authorName.equals(that.authorName)) return false;
-        return bookName.equals(that.bookName);
+        if (status != inputData.status) return false;
+        if (authorName != null ? !authorName.equals(inputData.authorName) : inputData.authorName != null) return false;
+        return bookName != null ? bookName.equals(inputData.bookName) : inputData.bookName == null;
     }
 
     @Override
     public int hashCode() {
-        int result = status;
-        result = 31 * result + authorName.hashCode();
-        result = 31 * result + bookName.hashCode();
+        int result = status != null ? status.hashCode() : 0;
+        result = 31 * result + (authorName != null ? authorName.hashCode() : 0);
+        result = 31 * result + (bookName != null ? bookName.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "ParsedEntity{" +
+        return "InputData{" +
                 "status=" + status +
                 ", authorName='" + authorName + '\'' +
                 ", bookName='" + bookName + '\'' +

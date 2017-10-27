@@ -4,8 +4,7 @@ import com.hessky.Main;
 import com.hessky.entity.Author;
 import com.hessky.entity.Book;
 import com.hessky.service.BooksService;
-import com.hessky.to.ParsedEntity;
-import com.hessky.util.Parser;
+import com.hessky.to.InputData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -26,29 +25,29 @@ public class BookController {
         this.booksService = booksService;
     }
 
-    public void chooseOperation(ParsedEntity parsedEntity) {
-        switch (parsedEntity.getStatus()) {
-            case Parser.INPUT_ERROR:
+    public void chooseOperation(InputData inputData) {
+        switch (inputData.getStatus()) {
+            case INPUT_ERROR:
                 parsingError();
                 break;
-            case Parser.GET_All:
+            case GET_All:
                 getBooks();
                 break;
-            case Parser.ADD:
-                addBook(parsedEntity);
+            case ADD:
+                addBook(inputData);
                 break;
-            case Parser.EDIT:
-                editBook(parsedEntity);
+            case EDIT:
+                editBook(inputData);
                 break;
-            case Parser.DELETE:
-                deleteBook(parsedEntity);
-            case Parser.IGNORE:
+            case DELETE:
+                deleteBook(inputData);
+            case IGNORE:
             default:
         }
     }
 
-    private void deleteBook(ParsedEntity parsedEntity) {
-        List<Book> delete = booksService.findBookByName(parsedEntity.getBookName());
+    private void deleteBook(InputData inputData) {
+        List<Book> delete = booksService.findBookByName(inputData.getBookName());
 
         if (delete.size() == 0) {
             System.out.println("Nothing to delete");
@@ -63,10 +62,10 @@ public class BookController {
         }
     }
 
-    private void editBook(ParsedEntity parsedEntity) {
+    private void editBook(InputData inputData) {
         System.out.println("Input new name:");
         String newName = Main.getScanner().nextLine();
-        List<Book> bookListWithSameNames = booksService.findBookByName(parsedEntity.getBookName());
+        List<Book> bookListWithSameNames = booksService.findBookByName(inputData.getBookName());
         Book editedBook = null;
         if (bookListWithSameNames.size() == 0) {
             System.out.println("Nothing to edit");
@@ -80,11 +79,11 @@ public class BookController {
             editedBook = booksService.editBook(bookListWithSameNames.get(num - 1), newName);
         }
         if (editedBook != null)
-            System.out.println("Book was renamed from " + parsedEntity.getBookName() + " to " + newName);
+            System.out.println("Book was renamed from " + inputData.getBookName() + " to " + newName);
     }
 
-    private void addBook(ParsedEntity parsedEntity) {
-        Book book = new Book(parsedEntity.getBookName(), new Author(parsedEntity.getAuthorName()));
+    private void addBook(InputData inputData) {
+        Book book = new Book(inputData.getBookName(), new Author(inputData.getAuthorName()));
         Book addedBook = booksService.addBook(book);
         if (addedBook == null) {
             System.out.println("Nothing adding");

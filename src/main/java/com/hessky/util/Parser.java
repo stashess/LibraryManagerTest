@@ -1,6 +1,6 @@
 package com.hessky.util;
 
-import com.hessky.to.ParsedEntity;
+import com.hessky.to.InputData;
 
 import java.util.regex.Pattern;
 
@@ -8,48 +8,42 @@ import java.util.regex.Pattern;
  * Created by Stanislav Cheslavskyi on 05.10.2017.
  */
 public class Parser {
-    public final static int INPUT_ERROR = 0;
-    public final static int GET_All = 1;
-    public final static int ADD = 2;
-    public final static int EDIT = 3;
-    public final static int DELETE = 4;
-    public static final int IGNORE = 5;
+    private static Pattern add = Pattern.compile("^add[ ][^\"]+[ ].+\"$");
+    private static Pattern edit = Pattern.compile("^edit[ ].+$");
+    private static Pattern delete = Pattern.compile("^delete[ ].+$");
+    private static Pattern getAll = Pattern.compile("^all[ ]books$");
+    private static Pattern ignore = Pattern.compile("");
 
-    public static ParsedEntity parse(String s) {
+    public static InputData parse(String s) {
         String book;
         String author;
 
-        Pattern add = Pattern.compile("^add[ ][^\"]+[ ].+\"$");
         if (add.matcher(s).matches()) {
             book = s.substring(s.indexOf('\"') + 1, s.length() - 1);
             author = s.substring(4, s.indexOf('\"') - 1);
-            return new ParsedEntity(Parser.ADD, author, book);
+            return new InputData(StatusCode.ADD, author, book);
         }
 
-        Pattern edit = Pattern.compile("^edit[ ].+$");
         if (edit.matcher(s).matches()) {
             book = s.substring(s.indexOf(' ') + 1, s.length());
-            return new ParsedEntity(Parser.EDIT, book);
+            return new InputData(StatusCode.EDIT, book);
         }
 
-        Pattern delete = Pattern.compile("^delete[ ].+$");
         if (delete.matcher(s).matches()) {
             book = s.substring(s.indexOf(' ') + 1, s.length());
-            return new ParsedEntity(Parser.DELETE, book);
+            return new InputData(StatusCode.DELETE, book);
         }
 
-        Pattern getAll = Pattern.compile("^all[ ]books$");
         if (getAll.matcher(s).matches()) {
-            return new ParsedEntity(Parser.GET_All);
+            return new InputData(StatusCode.GET_All);
         }
 
-        Pattern ignore = Pattern.compile("");
         if (ignore.matcher(s).matches()) {
-            return new ParsedEntity(Parser.IGNORE);
+            return new InputData(StatusCode.IGNORE);
         }
 
 
-        return new ParsedEntity(Parser.INPUT_ERROR);
+        return new InputData(StatusCode.INPUT_ERROR);
     }
 
 }
